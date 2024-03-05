@@ -8,7 +8,7 @@ function Nav() {
 }
 
 function PostList(props) {
-  return (<div className='post-list' onClick={() => props.onDetailHandeler(props.recipe)}> 
+  return (<div className='post-list' onClick={() => props.onDetailHandeler(props.recipe)}>
     <img src={props.recipe.imgUrl} width='300px'></img>
     <p>{props.recipe.title}</p>
   </div>)
@@ -23,22 +23,48 @@ function PostDetail(props) {
   </div>)
 }
 
+function Create() {
+  return (<div className='create-post'>
+    <form className='create-form'>
+      <input type="text" name="title" placeholder='what do you make' required></input>
+      <input type="text" name="title" placeholder='what do you need' required></input>
+      <textarea type="text" name="title" placeholder='how do you make' required></textarea>
+      <input type="url" name="imgUrl" placeholder='image url'></input>
+      <input type="submit"></input>
+    </form>
+  </div>)
+}
+
 function App() {
-  const [recipes, setRecipes] = useState([{id: 1, title: 'Salmon Teriyaki', ingredients: ['salmon', 'teriyaki sauce', 'broccoli', 'oil', 'pepper'], body: 'Season the salmon with pepper then grill it. Once cooked, put some teriyaki sauce and water 2~4 tbsp. Boil down until the sauce well the salmon. Accompany with cooked broccli or some veggies.', imgUrl: 'https://culinaryginger.com/wp-content/uploads/Teriyaki-Glazed-Salmon-59-720x405.jpg'}, {id: 2, title: 'Bulgogi', ingredients: ['beef', 'onion', 'oil', 'pepper', 'soy sauce', 'sugar'], body: 'Marinate beef with soy sauce, pepper, sugar for 1 hour. Grill it with onion until it cooked.', imgUrl: 'https://www.koreanbapsang.com/wp-content/uploads/2019/04/DSC_0893-3-e1645068795695.jpg'}]);
+  const [recipes, setRecipes] = useState([{ id: 1, title: 'Salmon Teriyaki', ingredients: ['salmon', 'teriyaki sauce', 'broccoli', 'oil', 'pepper'], body: 'Season the salmon with pepper then grill it. Once cooked, put some teriyaki sauce and water 2~4 tbsp. Boil down until the sauce well the salmon. Accompany with cooked broccli or some veggies.', imgUrl: 'https://culinaryginger.com/wp-content/uploads/Teriyaki-Glazed-Salmon-59-720x405.jpg' }, { id: 2, title: 'Bulgogi', ingredients: ['beef', 'onion', 'oil', 'pepper', 'soy sauce', 'sugar'], body: 'Marinate beef with soy sauce, pepper, sugar for 1 hour. Grill it with onion until it cooked.', imgUrl: 'https://www.koreanbapsang.com/wp-content/uploads/2019/04/DSC_0893-3-e1645068795695.jpg' }]);
   const [mode, setMode] = useState(null);
   const [detailRecipe, setDetailRecipe] = useState(null);
 
   return (
     <div className="App">
       <Nav></Nav>
-      {mode === 'DETAIL' ? <>
-        <a href='/'>Back</a>
-        <PostDetail recipe={detailRecipe}></PostDetail>
-      </> : <>
-        {recipes.map(recipe => 
-        <PostList key={recipe.id} recipe={recipe} onDetailHandeler={(detailRecipe) => {
-          setDetailRecipe(detailRecipe);
-          setMode('DETAIL')}}></PostList>)}</>}
+
+      {(mode === 'CREATE') ?
+        <>
+          <a href='/'>Back</a>
+          <Create></Create>
+        </>
+        : (mode === 'DETAIL') ? <>
+          <a href='/'>Back</a>
+          <PostDetail recipe={detailRecipe}></PostDetail>
+        </>
+          : <>
+            <button onClick={() => setMode('CREATE')}>Add a new recipi</button>
+            {recipes.map(recipe =>
+              <PostList
+                key={recipe.id}
+                recipe={recipe}
+                onDetailHandeler={(detailRecipe) => {
+                  setDetailRecipe(detailRecipe);
+                  setMode('DETAIL')
+                }}></PostList>)}
+          </>
+      }
     </div>
   );
 }
